@@ -1,0 +1,157 @@
+points:
+  key:
+    padding: cy
+    spread: cx
+    rotate: 180
+    footprints:
+      choc_hotswap:
+        type: choc
+        params:
+          hotswap: true
+          reverse: true
+        nets:
+          from: =name
+          to: GND
+  zones:
+    grid:
+      rows:
+        thumb:
+        bottom:
+        home:
+        top:
+      columns:
+        pinky.rows.thumb.skip: true
+        ring.rows.thumb.skip: true
+        middle.rows.thumb.skip: true
+        index:
+        inner:
+outlines:
+  exports:
+    raw:
+      - type: keys
+        side: left
+        size: [cx + 2, cy + 2]
+    thumb_row:
+      - type: polygon
+        points:
+          - ref: grid_pinky_bottom
+            shift: [0.5 cx + 1, 0]
+          - ref: grid_pinky_bottom
+            shift: [0.5 cx + 1, 1.5 cy + 6]
+          - ref: grid_middle_bottom
+            shift: [0.5 cx, 1.5 cy + 6]
+          - ref: grid_middle_bottom
+            shift: [0.5 cx, 1.5 cy + 3]
+          - ref: grid_middle_bottom
+            shift: [-0.5 cx, 1.5 cy + 3]
+          - ref: grid_middle_bottom
+            shift: [-0.5 cx, 1.5 cy + 6]
+          - ref: grid_inner_bottom
+            shift: [-0.5 cx - 1, 1.5 cy + 6]
+          - ref: grid_inner_bottom
+            shift: [-0.5 cx - 1, 0]
+          - ref: grid_pinky_bottom
+            shift: [0.5 cx + 1, 0]
+    base_cutout:
+      - type: outline
+        name: raw
+      - type: outline
+        name: thumb_row
+        operation: add
+    cutout:
+      - type: outline
+        name: base_cutout
+        fillet: 1 
+    keycaps:
+      - type: keys
+        side: left
+        size: [cx - 0.5, cy - 0.5]
+        bound: false
+    feet:
+      - type: circle
+        radius: 3
+        anchor:
+          ref: grid_pinky_top
+          shift: [0.5 cx + 1 - 3, -0.5 cy - 1 + 3]
+      - type: circle
+        radius: 3
+        anchor:
+          ref: grid_pinky_bottom
+          shift: [0.5 cx + 1 - 3, 1.5 cy + 6 - 3]
+      - type: circle
+        radius: 3
+        anchor:
+          ref: grid_inner_top
+          shift: [-0.5 cx - 1 + 3, -0.5 cy - 1 + 3]
+      - type: circle
+        radius: 3
+        anchor:
+          ref: grid_inner_bottom
+          shift: [-0.5 cx - 1 + 3, 1.5 cy + 6 - 3]
+pcbs:
+  buckygrid:
+    outlines:
+      board:
+        outline: cutout
+      keycaps:
+        outline: keycaps
+        layer: Eco1.User
+      feet:
+        outline: feet
+        layer: Eco1.User
+    footprints:
+      nice_nano_socket:
+        type: promicro_pretty
+        # params:
+        #   orientation: up
+        anchor:
+          ref: grid_pinky_bottom
+          shift: [0.5 cx + 1 - 19.5 - 3 , 0.5 cy + 8.5 + 3]
+          rotate: 180
+        nets:
+          P0: grid_pinky_bottom
+          P2: grid_pinky_home
+          P1: grid_pinky_top
+          P20: grid_ring_bottom
+          P3: grid_ring_home
+          P21: grid_ring_top
+          P15: grid_middle_bottom
+          P18: grid_middle_home
+          P19: grid_middle_top
+          P4: grid_index_thumb
+          P6: grid_index_bottom
+          P8: grid_index_home
+          P16: grid_index_top
+          P5: grid_inner_thumb
+          P7: grid_inner_bottom
+          P9: grid_inner_home
+          P10: grid_inner_top
+      power_switch:
+        type: pcm12
+        params:
+          reverse: true
+        anchor:
+          ref: grid_middle_bottom
+          shift: [0, 1.5 cy + 3 - 1.8]
+          rotate: 180
+        nets:
+          from: pos
+          to: RAW
+      reset_button:
+        type: b3u1000p
+        params:
+          reverse: true
+        anchor:
+          ref: grid_middle_bottom
+          shift: [0.5 cx - 3, 0.5 cy + 5]
+          rotate: 270
+        nets:
+          r1: RST
+          r2: GND
+      battery_terminal:
+        type: bat
+        anchor:
+          ref: grid_middle_bottom
+          shift: [2, 1.5 cy - 5]
+        nets: 
+          neg: GND

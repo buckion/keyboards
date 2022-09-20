@@ -1,0 +1,157 @@
+points:
+  key:
+    padding: cy
+    spread: cx
+    footprints:
+      choc_hotswap:
+        type: choc
+        params:
+          hotswap: true
+          reverse: true
+          keycaps: true
+        nets:
+          from: =name
+          to: GND
+  zones:
+    matrix:
+      rows:
+        bottom:
+        home:
+        top:
+      columns:
+        pinky:
+        ring.stagger: 0.3 cy
+        middle.stagger: 0.25 cy
+        index.stagger: -0.25 cy
+        inner.stagger: -0.15 cy
+    thumbs:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [-0.1 cx, -1.25 cy]
+        rotate: -5
+      columns:
+        outer.key.name: thumbs_near
+        home.key.name: thumbs_home
+        inner.key.name: thumbs_far
+outlines:
+  exports:
+    raw:
+      - type: keys
+        side: left
+        size: [cx + 2, cy + 2]
+    thumbs_glue:
+      - type: polygon
+        points:
+          - ref: matrix_pinky_bottom
+            shift: [0.5 cx , -0.5 cy - 1]
+          - ref: thumbs_near
+            shift: [-0.5 cx - 1, -0.5 cy - 1] 
+          - ref: thumbs_far
+            shift: [0.5 cx + 1, -0.5 cy - 1] 
+          # - ref: thumbs_far
+          #   shift: [0.5 cx + 1, 0.5 cy + 1] 
+          - ref: matrix_inner_home
+          - ref: matrix_pinky_home
+          - ref: matrix_pinky_bottom
+    controller_area:
+      - type: polygon
+        points:
+          - ref: matrix_inner_top
+            shift: [0, -2]
+          - ref: matrix_inner_top
+            shift: [2 cx - 4, -2]
+          - ref: matrix_inner_bottom
+            shift: [2 cx - 4, -8]
+          - ref: thumbs_far
+            shift: [0.5 cx + 1, -0.5 cy - 1] 
+          - ref: matrix_inner_home
+          - ref: matrix_inner_top
+            shift: [0, -2]
+    base_cutout:
+      - type: outline
+        name: raw
+      - type: outline
+        name: thumbs_glue
+        operation: add
+      - type: outline
+        name: controller_area
+        operation: add
+    cutout:
+      - type: outline
+        name: base_cutout
+        fillet: 1
+    keycaps:
+      - type: keys
+        side: left
+        size: [cx - 0.5, cy - 0.5]
+        bound: false
+pcbs:
+  buckyergo:
+    outlines:
+      board:
+        outline: cutout
+      keycaps:
+        outline: keycaps
+        layer: Eco1.User
+    footprints:
+      nice_nano_socket:
+        type: promicro_pretty
+        params:
+          battery_pins: true
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [cx + 2, -1.5 cy - 1]
+          rotate: 270
+        nets:
+          P0: matrix_index_top
+          P1: matrix_inner_top
+          P2: matrix_middle_top
+          P3: matrix_pinky_top
+          P4: matrix_ring_home
+          P5: matrix_index_home
+          P6: matrix_pinky_bottom
+          P7: matrix_middle_bottom
+          P8: matrix_inner_bottom
+          P9: thumbs_near
+          P10: thumbs_far
+          P14: matrix_index_bottom
+          P15: matrix_ring_bottom
+          P16: thumbs_home
+          P18: matrix_inner_home
+          P19: matrix_middle_home
+          P20: matrix_pinky_home
+          P21: matrix_ring_top
+      power_switch:
+        type: pcm12
+        params:
+          reverse: true
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [1 cx + 2, -4]
+          rotate: 180
+        nets:
+          from: pos
+          to: RAW
+      reset_button:
+        type: b3u1000p
+        params:
+          reverse: true
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [0.5 cx + 3, -5]
+          rotate: 270
+        nets:
+          r1: RST
+          r2: GND
+      battery_terminal:
+        type: bat
+        anchor:
+          ref:
+            - matrix_inner_top
+          shift: [1.5 cx + 2, -4]
+          rotate: 90
+        nets: 
+          neg: GND
